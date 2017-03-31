@@ -1,0 +1,43 @@
+
+# An example controller showing a sample home page
+GET     /                           	controllers.Application.index
+
+#For Post--------------------------------------------------------------------
+GET     /listPost/index                 controllers.PostController.showAllPost(page: Integer = 1)
+GET     /listPost/index/:page           controllers.PostController.showAllPost(page: Integer)
+POST    /listPost/like                  controllers.FavoriteController.favoriedPost
+GET    /addPost							controllers.PostController.addPost(page : Integer = 1)
+GET    /addPost/index/:page				controllers.PostController.addPost(page : Integer)
+POST   /createPost						controllers.PostController.createPost(page : Integer = 1)
+GET   /find/							controllers.PostController.findPost(page : Integer = 1)
+GET   /find/index/:page					controllers.PostController.findPost(page : Integer)
+GET   /detailPost/:postId				controllers.PostController.viewPostDetail(postId : Long)
+
+#For Pagging-------------------------------------------------------------
+
+
+#For Comment--------------------------------------------------------------------
+GET   /addComment/:postId               controllers.CommentController.createComment(postId : Long)
+
+
+#For User--------------------------------------------------------------------
+GET     /addUser                            controllers.UserController.add
+POST    /createUser                         controllers.UserController.create
+GET     /editUser/:userName                 controllers.UserController.editUser(userName : String)
+POST    /update/                            controllers.UserController.update
+
+#For DataTable--------------------------------------------------------------------
+GET     /kamedb                     controllers.DataTableTemplate.index()
+GET     /dataTable                     controllers.DataTableTemplate.list()
+
+#For Authenticate-------------------------------------------------------------
+GET     /login                          controllers.AuthController.login
+POST    /auth                           controllers.AuthController.auth
+GET     /logout                         controllers.AuthController.logout
+
+#Language class routes -------------------------------------------------------------
+GET     /language/:code/*returnpath     controllers.Language.changeLanguage(code: String, returnpath:String)
+GET     /language/:code/                controllers.Language.changeLanguageHome(code: String)
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

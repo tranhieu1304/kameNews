@@ -1,0 +1,82 @@
+@(message: String)
+
+@main("Welcome to Kame DataTables") {
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('#contacts').dataTable( {
+        "processing": true,
+        "serverSide": true,
+        "bSort": true,
+        "ajax": "@routes.DataTableTemplate.list()",
+        "aLengthMenu": [[5, 10, 17, -1], ["さん", "ご", "なな", "All"]],
+        "iDisplayLength": 5,
+        // That define Language
+        "language": {
+            "decimal":        "",
+            "emptyTable":     "No data available in table",
+            "info": "全て  _PAGE_  _PAGES_",
+            "infoEmpty": "ゼロ",
+            "infoFiltered": "(全て _MAX_ )",
+            "infoPostFix":    "",
+            "thousands":      ",",
+            "lengthMenu": "表示 _MENU_ in Kame's Data",
+            "loadingRecords": "Loading...",
+            "processing":     "Processing...",
+            "search":         "検索:",
+            "zeroRecords": "Nothing found - sorry",
+            "paginate": {
+            	"first":      "<",
+                "last":       ">",
+                "next":       "次",
+                "previous":   "前"
+            },
+            "aria": {
+                "sortAscending":  ": activate to sort column ascending",
+                "sortDescending": ": activate to sort column descending"
+            }
+        },
+
+        "pagingType": "full_numbers",
+        //
+        "columns": [
+            {
+            	"className":      'details-control',
+                data:           "0",
+                "defaultContent": ''
+            },
+            { 
+            	data: "1" ,
+            	"render": function ( data, type, full, meta ) {
+            		var tem = data;
+            		if(data.indexOf('h') != -1 ){
+            			return data;
+            		}else
+            	      return '<a href="'+data+'">Download</a>';
+            	    }
+            },
+            { 
+            	data: "2"
+            },
+            { 
+            	data: "3",
+            	"orderable":      false
+            }
+        ]
+    } );
+} );
+</script>
+
+  <h2>Welcome to Kame DataTables</h2>
+
+  <table id="contacts" class='data display'>
+    <thead>
+        <tr>
+            <th>お名前 </th>
+            <th>タイトル </th>
+            <th>E-mail アドレス</th>
+            <th>アクション </th>
+        </tr>
+    </thead>
+</table>
+}
