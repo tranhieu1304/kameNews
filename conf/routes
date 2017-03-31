@@ -1,6 +1,8 @@
 
 # An example controller showing a sample home page
 GET     /                           	controllers.Application.index
+GET     /eng                           	controllers.Application.changeToEng
+GET     /jp                           	controllers.Application.changeToJp
 
 #For Post--------------------------------------------------------------------
 GET     /listPost/index                 controllers.PostController.showAllPost(page: Integer = 1)
@@ -36,8 +38,6 @@ POST    /auth                           controllers.AuthController.auth
 GET     /logout                         controllers.AuthController.logout
 
 #Language class routes -------------------------------------------------------------
-GET     /language/:code/*returnpath     controllers.Language.changeLanguage(code: String, returnpath:String)
-GET     /language/:code/                controllers.Language.changeLanguageHome(code: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

@@ -33,6 +33,7 @@ public class PostController extends Controller {
 	FormFactory formFactory;
 
 	public Result showAllPost(int page) {
+//		ctx().changeLang("es");
 		PagedList<Post> pageList = Post.getPageList(page);
 		List<Post> posts = pageList.getList();
 		int maxPage = pageList.getTotalPageCount();

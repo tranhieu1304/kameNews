@@ -28,23 +28,18 @@ public class Application extends Controller {
      * <code>GET</code> request with a path of <code>/</code>.
      */
     public Result index() {
+    	ctx().changeLang("en");
     	return redirect(routes.PostController.showAllPost(1).url());
     }
+    public Result changeToEng() {
+    	ctx().changeLang("en");
+    	String path = request().getHeader("referer");
+    	return redirect(path);
+    }
+    public Result changeToJp() {
+    	ctx().changeLang("jp");
+    	String path = request().getHeader("referer");
+    	return redirect(path);
+    }
     
-    public static Result changeLanguage() {
-
-        Form<Coffee> coffeeForm = formFac(Coffee.class);
-        return ok(index.render(coffeeForm));
-    }
-
-    public static Result submit(){
-        Form<Coffee> coffeeForm = form(Coffee.class).bindFromRequest();
-
-        if (coffeeForm.hasErrors()){
-            return badRequest(index.render(coffeeForm));
-        }
-
-        return ok("it was saved...");
-    }
-
 }

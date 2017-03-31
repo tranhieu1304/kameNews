@@ -16,6 +16,12 @@ create table category_post (
   constraint pk_category_post primary key (category_id,post_id)
 );
 
+create table coffee (
+  id                            integer auto_increment not null,
+  name                          varchar(255),
+  constraint pk_coffee primary key (id)
+);
+
 create table comment (
   id                            bigint auto_increment not null,
   content                       varchar(255) not null,
@@ -120,6 +126,8 @@ drop index ix_post_user_id on post;
 drop table if exists category;
 
 drop table if exists category_post;
+
+drop table if exists coffee;
 
 drop table if exists comment;
 

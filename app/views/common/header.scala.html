@@ -1,3 +1,4 @@
+@import play.i18n._;
 <nav class="navbar navbar-default navbar-fixed-top">
 	<div class="navbar-header">
 	      <a class="navbar-brand " href="@routes.PostController.showAllPost(1)">FeedPicks</a>
@@ -10,7 +11,12 @@
 	        }else{
 	          <li><a href="@routes.AuthController.login()">ログイン</a></li>
 	        }
-	        <li> @play.i18n.Messages.get("test")</li>
+	        <li><a href="@routes.Application.changeToEng()"> EN </a></li>
+	        <li><a href="@routes.Application.changeToJp()"> JP </a></li>
+	        <li><a href="#"> @Messages.get("event.name.tip") </a></li>
+	        <li><a href="#"> @Messages.get("index.welcome", "kame", "Rua.com") </a></li>
+	    
+	        
 	      </ul>
 	  </div>
 </nav>
