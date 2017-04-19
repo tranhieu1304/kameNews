@@ -13,7 +13,7 @@ import play.mvc.Security;
 
 /**
  * This controller contains an action to handle HTTP requests
- * to the application's home page
+ * to the application's home page 
  */
 @Security.Authenticated(Secured.class)
 public class Application extends Controller {
