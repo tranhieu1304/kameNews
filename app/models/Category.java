@@ -10,6 +10,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
@@ -27,19 +29,19 @@ public class Category extends Model {
 	public Long id;
 
 	@Column(name = "name")
-	public String name ;
-	
+	public String name;
 
-	@Column(name = "title")
-	public String title ;
+
+	@Column(name = "titleKa")
+	public String title;
 
 	// Relationship
 	@ManyToMany(cascade = CascadeType.ALL)
 	public List<Post> posts;
-	
-	
+
+
 	public void save() {
-		
+
 	}
 
 	public void update() {

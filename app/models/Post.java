@@ -10,7 +10,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -18,12 +17,16 @@ import javax.persistence.UniqueConstraint;
 
 import com.avaje.ebean.Model;
 import com.avaje.ebean.PagedList;
+import com.avaje.ebean.Query;
+import com.avaje.ebean.RawSql;
+import com.avaje.ebean.RawSqlBuilder;
 import com.avaje.ebean.annotation.CreatedTimestamp;
 
 import constants.Constant;
+import play.Logger;
 
 @Entity
-@Table(name = "post", uniqueConstraints = { @UniqueConstraint(columnNames = { "url" }) })
+@Table(name = "post", uniqueConstraints = {@UniqueConstraint(columnNames = {"url"})})
 public class Post extends Model {
 	@Id
 	@GeneratedValue
@@ -51,7 +54,13 @@ public class Post extends Model {
 	@Transient
 	public List<String> messageError = new ArrayList<>();
 	// Relationship
-	@ManyToOne(cascade = CascadeType.ALL)
+	// @ManyToOne(cascade = CascadeType.ALL)
+	// public User user;
+
+	@Column(name = "user_id")
+	public long userId;
+
+	@Transient
 	public User user;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
@@ -64,20 +73,22 @@ public class Post extends Model {
 	public List<Category> categories;
 
 	private static Finder<Long, Post> find = new Finder<>(Post.class);
-
+	private static Finder<Long, User> findUser = new Finder<>(User.class);
+	private static Finder<String, Post> finder = new Finder<>("kame", Post.class);
 	private static int pageSize = Constant.PAGINATION_PAGE_SIZE;
 
 	public static PagedList<Post> findAll(int page) {
 
 		int pageIndex = page - 1;
-		PagedList<Post> pagedList = find.where().eq("isDelete", false).findPagedList(pageIndex, pageSize);
+		PagedList<Post> pagedList =
+			find.where().eq("isDelete", false).findPagedList(pageIndex, pageSize);
 		return pagedList;
 	}
 
 	public static PagedList<Post> findByUser(User user, int page) {
 		int pageIndex = page - 1;
-		PagedList<Post> pagedList = find.where().like("isDelete", "0").in("user", user).findPagedList(pageIndex,
-				pageSize);
+		PagedList<Post> pagedList =
+			find.where().like("isDelete", "0").in("user", user).findPagedList(pageIndex, pageSize);
 		return pagedList;
 	}
 
@@ -87,7 +98,8 @@ public class Post extends Model {
 
 	public static PagedList<Post> findTitle(String keyword, int page) {
 		int pageIndex = page - 1;
-		PagedList<Post> pagedList = find.where().like("title", "%" + keyword + "%").findPagedList(pageIndex, pageSize);
+		PagedList<Post> pagedList =
+			find.where().like("title", "%" + keyword + "%").findPagedList(pageIndex, pageSize);
 		return pagedList;
 	}
 
@@ -97,16 +109,17 @@ public class Post extends Model {
 	}
 
 	public static Post findByPostIdCommentStatus(Long postId) {
-		Post post = find.select("*")
-						.fetch("comments")
-						.where()
-						.eq("comments.isDelete", true)
-						.eq("id", postId)
-						.setMaxRows(1)
-						.findUnique();
+		Post post = find.select("*").fetch("comments").where().eq("comments.isDelete", true)
+			.eq("id", postId).setMaxRows(1).findUnique();
 		return post;
 	}
 
+	public static PagedList<Post> getPageList(int page) {
+		int pageIndex = page - 1;
+		PagedList<Post> pagedList =
+			find.where().like("isDelete", "0").findPagedList(pageIndex, pageSize);
+		return pagedList;
+	}
 
 	public void save() {
 		if (this.createDate == null) {
@@ -127,9 +140,37 @@ public class Post extends Model {
 		super.update();
 	}
 
-	public static PagedList<Post> getPageList(int page) {
-		int pageIndex = page - 1;
-		PagedList<Post> pagedList = find.where().like("isDelete", "0").findPagedList(pageIndex, pageSize);
-		return pagedList;
+	public static void testKameFail() {
+		String userId = "3";
+		String sql =
+			"select p.title from kameDemo01.post p CROSS JOIN kame01.user u ON p.user_id = u.id";
+		RawSql rawSql = RawSqlBuilder.parse(sql).create();
+		Query<Post> query = find.query();
+		query.setRawSql(rawSql);
+
+		List<Post> postList = query.findList();
+		Logger.info("size = " + postList.size());
+		postList.forEach(item -> Logger.info("DATA =  " + item.toString()));
 	}
+
+	public static void testKame() {
+		List<Post> postList = finder.where().setDistinct(true).select("id, url").findList();
+		// Logger.info("size = " + postList.size());
+		// postList.forEach(item -> Logger.info("DATA = " + item.toString()));
+
+		testKameFail();
+	}
+
+	public static void joinTableKame() {
+
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "id = " + id + "\n" + "url = " + url + "\n" + "title =" + title + " \n" + "imgUrl = "
+			+ imgUrl + "\n " + "content = " + content + "\n " + "isDelete = " + isDelete + " \n"
+			+ "userId=" + userId + "\n " + "createDate =" + createDate;
+	}
+
 }

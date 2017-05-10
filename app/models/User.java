@@ -30,7 +30,7 @@ import play.mvc.Http;
  *
  */
 @Entity
-@Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = "email") })
+@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
 public class User extends Model {
 	@Id
 	@GeneratedValue
@@ -40,13 +40,13 @@ public class User extends Model {
 	@Column(name = "name", nullable = false, length = 255)
 	public String name;
 
-	@Column(name = "password", nullable = false, length = 1024)
+	@Column(name = "password", nullable = false, length = 255)
 	public String password;
 
-	@Column(name = "passwordConf", nullable = false, length = 1024)
+	@Column(name = "passwordConf", nullable = false, length = 255)
 	public String passwordConf;
 
-	@Column(name = "email", nullable = false, length = 1024)
+	@Column(name = "email", nullable = false, length = 255)
 	public String email;
 
 	@Constraints.Required
@@ -66,13 +66,13 @@ public class User extends Model {
 
 	@Column(name = "isDelete")
 	public boolean isDelete = false;
-	
+
 	@Lob
 	@Column(name = "imageContent")
 	public byte[] imageContent;
 
 	// Relationship
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	@javax.persistence.Transient
 	public List<Post> posts;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")

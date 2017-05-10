@@ -27,7 +27,7 @@ public class Favorite extends Model {
 	@GeneratedValue
 	public Long id;
 
-	@Column(name = "createDate1")
+	@Column(name = "createDate")
 	@CreatedTimestamp
 	public Date createDate = new Date();
 

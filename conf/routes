@@ -37,6 +37,8 @@ GET     /login                          controllers.AuthController.login
 POST    /auth                           controllers.AuthController.auth
 GET     /logout                         controllers.AuthController.logout
 
+GET     /testKame                       controllers.PostController.testKame
+
 #Language class routes -------------------------------------------------------------
 
 # Map static resources from the /public folder to the /assets URL path

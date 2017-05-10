@@ -12,7 +12,7 @@ import com.avaje.ebean.Model;
 import play.data.validation.Constraints;
 
 @Entity
-@Table(name="Contact")
+@Table(name = "contact")
 public class Contact extends Model {
 
 	@Id
@@ -21,11 +21,11 @@ public class Contact extends Model {
 	@Constraints.Required
 	public String name;
 
-	@Column(name="title")
+	@Column(name = "title")
 	public String title;
 	public String email;
 
-	public static Model.Finder<Long,Contact> find = new Model.Finder(Long.class, Contact.class);
+	public static Model.Finder<Long, Contact> find = new Model.Finder(Long.class, Contact.class);
 
 	public static List<Contact> findAll() {
 		return find.all();

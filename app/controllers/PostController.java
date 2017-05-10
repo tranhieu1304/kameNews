@@ -7,13 +7,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import com.avaje.ebean.PagedList;
-import com.google.inject.Inject;
 
 import helpers.Secured;
 import models.Comment;
 import models.Post;
 import models.User;
+import models.service.PostService;
+import play.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
@@ -33,8 +36,8 @@ public class PostController extends Controller {
 	FormFactory formFactory;
 
 	public Result showAllPost(int page) {
-//		ctx().changeLang("es");
-		PagedList<Post> pageList = Post.getPageList(page);
+		// ctx().changeLang("es");
+		PagedList<Post> pageList = postService.getPageList(page);
 		List<Post> posts = pageList.getList();
 		int maxPage = pageList.getTotalPageCount();
 		// FOr test
@@ -47,18 +50,23 @@ public class PostController extends Controller {
 		String userName = request.username();
 		User user = User.findByEmail(userName);
 		Form<Post> form = formFactory.form(Post.class);
-		PagedList<Post> pageList = Post.findByUser(user, page);
+		PagedList<Post> pageList = postService.findByUser(user, page);
 		int maxPage = pageList.getTotalPageCount();
 		List<Post> posts = pageList.getList();
-		return ok(views.html.Post.createNewPost.render(form, posts, new ArrayList<String>(), page, maxPage));
+		return ok(views.html.Post.createNewPost.render(form, posts, new ArrayList<String>(), page,
+			maxPage));
 	}
+
+	@Inject
+	PostService postService;
 
 	public Result createPost(int page) {
 		// This request send one more time to server >>> let fix it
 		Http.Request request = Http.Context.current().request();
 		String userName = request.username();
 		User user = User.findByEmail(userName);
-		PagedList<Post> pageList = Post.findByUser(user, 1);
+		PagedList<Post> pageList = postService.findByUser(user, 1);
+		PagedList<Post> pageListTem = Post.findByUser(user, 1);
 		int maxPage = pageList.getTotalPageCount();
 
 		Form<Post> form = formFactory.form(Post.class).bindFromRequest();
@@ -82,7 +90,8 @@ public class PostController extends Controller {
 					post.messageError.add("正しいURLを入力してください。");
 				}
 			if (post.messageError.isEmpty()) {
-				post.save();
+				post.userId = user.id;
+				postService.save(post);
 				form = formFactory.form(Post.class);
 
 			}
@@ -90,17 +99,18 @@ public class PostController extends Controller {
 			return badRequest("Have some error");
 		}
 		List<Post> posts = pageList.getList();
-		return ok(views.html.Post.createNewPost.render(form, posts, post.messageError, page, maxPage));
+		return ok(
+			views.html.Post.createNewPost.render(form, posts, post.messageError, page, maxPage));
 	}
 
 	public Result viewPostDetail(Long postId) {
-		Post post = Post.findById(postId);
+		Post post = postService.findById(postId);
 		Form<Comment> formComment = formFactory.form(Comment.class);
 		return ok(views.html.Post.postDetail.render(post, formComment));
 	}
 
 	private boolean isExistUrl(String url) {
-		List<Post> posts = Post.findByUrl(url);
+		List<Post> posts = postService.findByUrl(url);
 		if (posts.isEmpty())
 			return false;
 		else
@@ -116,9 +126,9 @@ public class PostController extends Controller {
 		if (!form.hasErrors()) {
 			String keyword = form.get().keyword;
 			if ("".equals(keyword) || keyword == null) {
-				pageList = Post.findAll(page);
+				pageList = postService.findAll(page);
 			} else {
-				pageList = Post.findTitle(keyword, page);
+				pageList = postService.findTitle(keyword, page);
 			}
 			posts = pageList.getList();
 			maxPage = pageList.getTotalPageCount();
@@ -128,6 +138,12 @@ public class PostController extends Controller {
 
 	public static class FindForm {
 		public String keyword;
+	}
+
+	public Result testKame() {
+		Logger.error("gi dat");
+		Post.testKame();
+		return findPost(1);
 	}
 
 }
