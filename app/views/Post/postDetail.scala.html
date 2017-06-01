@@ -16,7 +16,7 @@
 		            </tr>
 	            </thead>
 	            <tbody>
-		            @for(comment <- post.comments){
+		            @for(comment <- post.getComments()){
 			            <tr id="@comment.id">
 			                <td>@comment.id</td>
 			                <td>@comment.createDate</td>

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package controllers;
 
@@ -15,8 +15,7 @@ import helpers.Secured;
 import models.Comment;
 import models.Post;
 import models.User;
-import models.service.PostService;
-import play.Logger;
+import play.api.Logger;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
@@ -37,7 +36,7 @@ public class PostController extends Controller {
 
 	public Result showAllPost(int page) {
 		// ctx().changeLang("es");
-		PagedList<Post> pageList = postService.getPageList(page);
+		PagedList<Post> pageList = Post.getPageList(page);
 		List<Post> posts = pageList.getList();
 		int maxPage = pageList.getTotalPageCount();
 		// FOr test
@@ -50,26 +49,26 @@ public class PostController extends Controller {
 		String userName = request.username();
 		User user = User.findByEmail(userName);
 		Form<Post> form = formFactory.form(Post.class);
-		PagedList<Post> pageList = postService.findByUser(user, page);
+		PagedList<Post> pageList = Post.findByUser(user, page);
 		int maxPage = pageList.getTotalPageCount();
 		List<Post> posts = pageList.getList();
 		return ok(views.html.Post.createNewPost.render(form, posts, new ArrayList<String>(), page,
-			maxPage));
+			maxPage, new Post()));
 	}
 
-	@Inject
-	PostService postService;
 
 	public Result createPost(int page) {
 		// This request send one more time to server >>> let fix it
 		Http.Request request = Http.Context.current().request();
 		String userName = request.username();
 		User user = User.findByEmail(userName);
-		PagedList<Post> pageList = postService.findByUser(user, 1);
+		PagedList<Post> pageList = Post.findByUser(user, 1);
 		PagedList<Post> pageListTem = Post.findByUser(user, 1);
 		int maxPage = pageList.getTotalPageCount();
 
 		Form<Post> form = formFactory.form(Post.class).bindFromRequest();
+		play.Logger.info("Post kame = " + form.get().kame);
+		play.Logger.info("Comment kame = " + form.get().user.kame);
 		Post post = new Post();
 		if (!form.hasErrors()) {
 			post = form.get();
@@ -90,31 +89,34 @@ public class PostController extends Controller {
 					post.messageError.add("正しいURLを入力してください。");
 				}
 			if (post.messageError.isEmpty()) {
-				post.userId = user.id;
-				postService.save(post);
+				post.save();
+				play.Logger.info("-----------" + post.id);
+				play.Logger.error("---IDDDDD-------" + post.id);
 				form = formFactory.form(Post.class);
 
 			}
+
 		} else {
+			play.Logger.error("------Error----" + form.errors());
 			return badRequest("Have some error");
 		}
 		List<Post> posts = pageList.getList();
-		return ok(
-			views.html.Post.createNewPost.render(form, posts, post.messageError, page, maxPage));
+		return ok(views.html.Post.createNewPost.render(form, posts, post.messageError, page,
+			maxPage, new Post()));
 	}
 
 	public Result viewPostDetail(Long postId) {
-		Post post = postService.findById(postId);
+		Post post = Post.findById(postId);
 		Form<Comment> formComment = formFactory.form(Comment.class);
 		return ok(views.html.Post.postDetail.render(post, formComment));
 	}
 
 	private boolean isExistUrl(String url) {
-		List<Post> posts = postService.findByUrl(url);
-		if (posts.isEmpty())
-			return false;
-		else
-			return true;
+		List<Post> posts = Post.findByUrl(url);
+		// if (posts.isEmpty())
+		// return false;
+		// else
+		return false;
 	}
 
 	public Result findPost(int page) {
@@ -126,9 +128,9 @@ public class PostController extends Controller {
 		if (!form.hasErrors()) {
 			String keyword = form.get().keyword;
 			if ("".equals(keyword) || keyword == null) {
-				pageList = postService.findAll(page);
+				pageList = Post.findAll(page);
 			} else {
-				pageList = postService.findTitle(keyword, page);
+				pageList = Post.findTitle(keyword, page);
 			}
 			posts = pageList.getList();
 			maxPage = pageList.getTotalPageCount();
@@ -140,10 +142,15 @@ public class PostController extends Controller {
 		public String keyword;
 	}
 
-	public Result testKame() {
-		Logger.error("gi dat");
-		Post.testKame();
-		return findPost(1);
+	public Result deletePost(long postId) {
+		Post.delete(postId);
+		return showAllPost(1);
 	}
+
+	public Result findByPostIdCommentStatus(String categoryId1, String categoryId2) {
+		Post.findBy2CAtegory(categoryId1, categoryId2);
+		return showAllPost(1);
+	}
+
 
 }

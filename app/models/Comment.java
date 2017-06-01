@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package models;
 
@@ -29,6 +29,9 @@ public class Comment extends Model {
 
 	@Column(name = "content", nullable = false, length = 255)
 	public String content;
+
+	@Column(name = "kame", length = 255)
+	public String kame;
 
 	@Column(name = "createDate")
 	@CreatedTimestamp

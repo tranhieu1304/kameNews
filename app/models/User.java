@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package models;
 
@@ -49,10 +49,13 @@ public class User extends Model {
 	@Column(name = "email", nullable = false, length = 255)
 	public String email;
 
-	@Constraints.Required
 	@Column(name = "sex")
 	// 0 = male, 1 = female, 2 = others
 	public int sex;
+
+	@Column(name = "kame")
+	// 0 = male, 1 = female, 2 = others
+	public String kame;
 
 	@Column(name = "birthday")
 	public java.util.Date birthday;
@@ -72,7 +75,7 @@ public class User extends Model {
 	public byte[] imageContent;
 
 	// Relationship
-	@javax.persistence.Transient
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	public List<Post> posts;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")

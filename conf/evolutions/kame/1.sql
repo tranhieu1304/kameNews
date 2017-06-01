@@ -96,6 +96,9 @@ create index ix_favorite_user_id on favorite (user_id);
 alter table favorite add constraint fk_favorite_post_id foreign key (post_id) references post (id) on delete restrict on update restrict;
 create index ix_favorite_post_id on favorite (post_id);
 
+alter table post add constraint fk_post_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_post_user_id on post (user_id);
+
 
 # --- !Downs
 
@@ -116,6 +119,9 @@ drop index ix_favorite_user_id on favorite;
 
 alter table favorite drop foreign key fk_favorite_post_id;
 drop index ix_favorite_post_id on favorite;
+
+alter table post drop foreign key fk_post_user_id;
+drop index ix_post_user_id on post;
 
 drop table if exists category;
 

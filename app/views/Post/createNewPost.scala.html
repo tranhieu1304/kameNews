@@ -1,4 +1,4 @@
-@(formPost: Form[models.Post], posts: List[models.Post], message : List[String], currentPage: Int, maxPage: Int)
+@(formPost: Form[models.Post], posts: List[models.Post], message : List[String], currentPage: Int, maxPage: Int, post : models.Post)
 
 @import java.lang.String;  var username = "";var favoriteStatus = true;
 @import java.lang.Long; var favoriteId = -1l; var countFavorite = 0l;
@@ -19,12 +19,33 @@
 									<p style="color:red;"> @error</p>
 								}
 							}
+
+<!--
+						@(helper.inputText (
+							field = formPost("kame"),
+							'_label -> "Post.Kame",
+							'placeholder -> "Enter Post.Kame"
+						))
+						@(helper.inputText (
+							field = formPost("user.kame"),
+							'_label -> "user.kame",
+							'placeholder -> "Enter User.kame"
+						))
+ -->
+
+						@defining(formPost("kame")){ kame =>
+        					<input type="text" name="@kame.name"  />
+						}
+						@defining(formPost("user.kame")){ kameU =>
+        					<input type="text" name="@kameU.name" />
+						}
 						<button type="submit">投稿</button>
 					}
+
 	            </div>
 	        </div>
 	        @tablePost(posts, "createNewPost", currentPage, maxPage)
-	
+
 	    </div>
 	</div>
 	<a class="#" href="@routes.PostController.showAllPost(1)">All Post </a>

@@ -14,7 +14,7 @@
              <th>遷移</th>
          </tr>
         </thead>
-        
+
         <tbody>
          @for(post <- posts){
 	         	@{countFavorite=0}
@@ -24,7 +24,7 @@
 		           	@if(favorite.user.email == session.get("email")){
 		           			@{favoriteId = favorite.id}
 		           			@(favoriteStatus = favorite.isDelete)
-		           	} 
+		           	}
 		           	@if(favorite.isDelete == false){
 		           		@{countFavorite += 1}
 		           	}
@@ -47,7 +47,7 @@
               		@post.user.name
               </td>
               <td>
-              	<a class="" href="@routes.PostController.viewPostDetail(post.id)">@post.title</a>	
+              	<a class="" href="@routes.PostController.viewPostDetail(post.id)">@post.title</a>
               </td>
               <td>
 	               @if(pageName == "showAllPost" || pageName == "findPost"){

@@ -25,6 +25,7 @@ create table coffee (
 create table comment (
   id                            bigint auto_increment not null,
   content                       varchar(255) not null,
+  kame                          varchar(255),
   isdelete                      tinyint(1) default 0,
   user_id                       bigint,
   post_id                       bigint,
@@ -53,12 +54,12 @@ create table post (
   id                            bigint auto_increment not null,
   url                           varchar(255) not null,
   title                         varchar(255),
+  kame                          varchar(255),
   imgurl                        varchar(255),
   content                       varchar(255),
   isdelete                      tinyint(1) default 0,
   user_id                       bigint,
   createdate                    datetime(6) not null,
-  constraint uq_post_url unique (url),
   constraint pk_post primary key (id)
 );
 
@@ -69,6 +70,7 @@ create table user (
   passwordconf                  varchar(255) not null,
   email                         varchar(255) not null,
   sex                           integer,
+  kame                          varchar(255),
   birthday                      datetime(6),
   modifieddate                  datetime(6),
   isdelete                      tinyint(1) default 0,
@@ -96,6 +98,9 @@ create index ix_favorite_user_id on favorite (user_id);
 alter table favorite add constraint fk_favorite_post_id foreign key (post_id) references post (id) on delete restrict on update restrict;
 create index ix_favorite_post_id on favorite (post_id);
 
+alter table post add constraint fk_post_user_id foreign key (user_id) references user (id) on delete restrict on update restrict;
+create index ix_post_user_id on post (user_id);
+
 
 # --- !Downs
 
@@ -116,6 +121,9 @@ drop index ix_favorite_user_id on favorite;
 
 alter table favorite drop foreign key fk_favorite_post_id;
 drop index ix_favorite_post_id on favorite;
+
+alter table post drop foreign key fk_post_user_id;
+drop index ix_post_user_id on post;
 
 drop table if exists category;
 

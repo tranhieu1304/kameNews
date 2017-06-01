@@ -14,6 +14,7 @@ POST   /createPost						controllers.PostController.createPost(page : Integer = 1
 GET   /find/							controllers.PostController.findPost(page : Integer = 1)
 GET   /find/index/:page					controllers.PostController.findPost(page : Integer)
 GET   /detailPost/:postId				controllers.PostController.viewPostDetail(postId : Long)
+GET   /findCategory/:catId1/:catId2		controllers.PostController.findByPostIdCommentStatus(catId1 : String, catId2: String)
 
 #For Pagging-------------------------------------------------------------
 
@@ -37,7 +38,7 @@ GET     /login                          controllers.AuthController.login
 POST    /auth                           controllers.AuthController.auth
 GET     /logout                         controllers.AuthController.logout
 
-GET     /testKame                       controllers.PostController.testKame
+GET     /delete/:postId                       controllers.PostController.deletePost(postId : Long)
 
 #Language class routes -------------------------------------------------------------
 
