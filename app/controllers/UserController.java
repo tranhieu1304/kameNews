@@ -1,9 +1,11 @@
 package controllers;
 
+import com.avaje.ebean.enhance.agent.SysoutMessageOutput;
 import com.google.inject.Inject;
 
 import constants.Constant;
 import models.User;
+import models.UserBase;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
@@ -15,6 +17,11 @@ public class UserController extends Controller {
 
 	public Result add() {
 		Form<User> f = formFactory.form(User.class);
+		User user = new User();
+		user.setId(99l);
+		user.name = "kame";
+		user.email = "gmail.com";
+		tem(user);
 
 		return ok(views.html.User.add.render(f));
 	}
@@ -30,7 +37,7 @@ public class UserController extends Controller {
 			session(Constant.SESSION_USER_NAME, data.name);
 			String returnUrl = ctx().session().get(Constant.SESSION_RETURN_URL);
 			if (returnUrl == null || returnUrl.equals("")
-					|| returnUrl.equals(routes.AuthController.login().absoluteURL(request()))) {
+				|| returnUrl.equals(routes.AuthController.login().absoluteURL(request()))) {
 				returnUrl = routes.Application.index().url();
 			}
 			return redirect(returnUrl);
@@ -55,5 +62,13 @@ public class UserController extends Controller {
 			user.update();
 			return ok(views.html.User.userDetail.render(form));
 		}
+	}
+
+	private void tem(UserBase base) {
+		System.out.println("--" + base.getId());
+		User user = (User) base;
+		String tem = user.name;
+		System.out.println(tem + "--" + base.getId());
+		System.out.println(user.email);
 	}
 }

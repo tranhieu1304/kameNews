@@ -16,6 +16,9 @@ GET   /find/index/:page					controllers.PostController.findPost(page : Integer)
 GET   /detailPost/:postId				controllers.PostController.viewPostDetail(postId : Long)
 GET   /findCategory/:catId1/:catId2		controllers.PostController.findByPostIdCommentStatus(catId1 : String, catId2: String)
 
+
+GET   /form/demo						controllers.PostController.formDemo()
+
 #For Pagging-------------------------------------------------------------
 
 

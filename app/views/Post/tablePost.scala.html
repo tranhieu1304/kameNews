@@ -44,7 +44,7 @@
               		<img alt="" src="@post.imgUrl">
               </td>
               <td>
-              		@post.user.name
+              		@post.user.name | @if(post.getKame() == "09"){kame ok}
               </td>
               <td>
               	<a class="" href="@routes.PostController.viewPostDetail(post.id)">@post.title</a>

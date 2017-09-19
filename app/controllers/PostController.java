@@ -40,7 +40,19 @@ public class PostController extends Controller {
 		List<Post> posts = pageList.getList();
 		int maxPage = pageList.getTotalPageCount();
 		// FOr test
+		Post deletePost = Post.findById(4l);
+		if (deletePost != null) {
+			deletePost.setContent("kame 44  000002");
+			deletePost.setUser(User.findById(3l));
+			deletePost.url = "kamfdsfs df sdfsd  00002";
+			deletePost.user.sex = 22;
+			deletePost.title = "0001";
+			deletePost.setKame("kame to ke dasdasdddadsssssss");
+			// deletePost.delete();
+		}
 
+		// User deUser = User.findById(2l);
+		// deUser.delete();
 		return ok(views.html.Post.showPostList.render(posts, page, maxPage));
 	}
 
@@ -65,11 +77,12 @@ public class PostController extends Controller {
 		PagedList<Post> pageList = Post.findByUser(user, 1);
 		PagedList<Post> pageListTem = Post.findByUser(user, 1);
 		int maxPage = pageList.getTotalPageCount();
-
 		Form<Post> form = formFactory.form(Post.class).bindFromRequest();
-		play.Logger.info("Post kame = " + form.get().kame);
-		play.Logger.info("Comment kame = " + form.get().user.kame);
 		Post post = new Post();
+		play.Logger.info("Post IDDDDDDDD = " + post.getId());
+		play.Logger.info("Post kame = " + form.get().getKame());
+		play.Logger.info("Comment kame = " + form.get().user.getKame());
+
 		if (!form.hasErrors()) {
 			post = form.get();
 			post.user = user;
@@ -82,6 +95,7 @@ public class PostController extends Controller {
 					}
 					post.title = URLGetTitle.getTitle(post.url);
 					post.imgUrl = URLGetTitle.getImageUrl(post.url, "");
+					post.content = "first kame";
 				} catch (IOException e) {
 					e.printStackTrace();
 					post.messageError.add("正しいURLを入力してください。");
@@ -90,12 +104,9 @@ public class PostController extends Controller {
 				}
 			if (post.messageError.isEmpty()) {
 				post.save();
-				play.Logger.info("-----------" + post.id);
-				play.Logger.error("---IDDDDD-------" + post.id);
 				form = formFactory.form(Post.class);
 
 			}
-
 		} else {
 			play.Logger.error("------Error----" + form.errors());
 			return badRequest("Have some error");
@@ -143,7 +154,6 @@ public class PostController extends Controller {
 	}
 
 	public Result deletePost(long postId) {
-		Post.delete(postId);
 		return showAllPost(1);
 	}
 
@@ -152,5 +162,15 @@ public class PostController extends Controller {
 		return showAllPost(1);
 	}
 
+	public Result formDemo() {
+		Form<Post> form = formFactory.form(Post.class).bindFromRequest();
+		Form<User> formUser = formFactory.form(User.class).bindFromRequest();
+		Post post = form.get();
+		User user = formUser.get();
+		play.Logger.info("Form POST = " + post.title);
+		play.Logger.info("Form POST = " + post.getKame());
+		play.Logger.info("Form USER = " + user.getKame());
+		return redirect("addPost");
+	}
 
 }

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package models;
 
@@ -27,7 +27,7 @@ public class Favorite extends Model {
 	@GeneratedValue
 	public Long id;
 
-	@Column(name = "createDate")
+	@Column(name = "createDate1")
 	@CreatedTimestamp
 	public Date createDate = new Date();
 

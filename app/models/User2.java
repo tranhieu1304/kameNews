@@ -8,18 +8,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 
-import javax.annotation.MatchesPattern;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
-import com.avaje.ebean.Model;
 import com.avaje.ebean.annotation.CreatedTimestamp;
 
 import constants.Constant;
@@ -32,8 +28,8 @@ import play.mvc.Http;
  *
  */
 @Entity
-@Table(name = "user", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
-public class User extends UserBase {
+@Table(name = "user2", uniqueConstraints = {@UniqueConstraint(columnNames = "email")})
+public class User2 extends UserBase {
 
 	@Constraints.Required(message = "enter name here")
 	@Column(name = "name", nullable = false, length = 255)
@@ -88,7 +84,7 @@ public class User extends UserBase {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	public List<Favorite> favorites;
 
-	private static Finder<Long, User> find = new Finder<>(User.class);
+	private static Finder<Long, User2> find = new Finder<>(User2.class);
 
 	public void save() {
 		this.createDate = new Date();
@@ -150,19 +146,20 @@ public class User extends UserBase {
 			return "";
 	}
 
-	public static User findById(long id) {
+	public static User2 findById(long id) {
 		return find.where().eq("id", id).findUnique();
 	}
 
-	public static User findByEmail(String email) {
+	public static User2 findByEmail(String email) {
 		return find.where().eq("email", email).findUnique();
 	}
 
-	public static User findByEmailAndPassword(String email, String password) {
+	public static User2 findByEmailAndPassword(String email, String password) {
 		return find.where().eq("email", email).eq("password", password).findUnique();
 	}
 
-	public static User authenticate(String email, String password) throws NoSuchAlgorithmException {
+	public static User2 authenticate(String email, String password)
+		throws NoSuchAlgorithmException {
 		String hashedPassword = "";
 		if (password != null) {
 			hashedPassword = sha512(password);
@@ -170,7 +167,7 @@ public class User extends UserBase {
 		return findByEmailAndPassword(email, hashedPassword);
 	}
 
-	public static List<User> findAll() {
+	public static List<User2> findAll() {
 		return find.findList();
 	}
 

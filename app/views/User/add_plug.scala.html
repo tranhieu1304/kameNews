@@ -1,0 +1,26 @@
+@(
+	form1: Form[models.User],
+	form2: Form[models.User],
+	typeK		: String
+)
+@import b3.vertical.fieldConstructor
+
+	@if(typeK == "kame"){
+			@defining(form1){  form =>
+				<div class="form-group">
+					@b3.date(
+		                        field = form("birthday"),
+		                        '_label -> "誕生日"
+		                )
+				</div>
+
+				<div class="form-group">
+				    @b3.radio(
+			                form("sex"),
+			                options = Seq("0" -> "男性",
+			                			  "1" -> "女性"),
+			                '_label -> "性別"
+		                )
+				</div>
+			}
+}

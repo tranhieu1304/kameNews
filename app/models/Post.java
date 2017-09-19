@@ -3,9 +3,7 @@ package models;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,7 +15,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
 
 import com.avaje.ebean.Expr;
 import com.avaje.ebean.Expression;
@@ -26,15 +23,15 @@ import com.avaje.ebean.PagedList;
 import com.avaje.ebean.annotation.CreatedTimestamp;
 
 import constants.Constant;
-import javassist.expr.ExprEditor;
 import play.Logger;
 
 @Entity
 @Table(name = "post")
 public class Post extends Model {
+
 	@Id
 	@GeneratedValue
-	public Long id;
+	public long id;
 
 	@Column(name = "url", nullable = false, length = 255)
 	public String url;
@@ -43,7 +40,7 @@ public class Post extends Model {
 	public String title;
 
 	@Column(name = "kame", length = 255)
-	public String kame;
+	private String kame;
 
 	@Column(name = "imgUrl", length = 255)
 	public String imgUrl;
@@ -53,22 +50,16 @@ public class Post extends Model {
 
 	@Column(name = "createDate")
 	@CreatedTimestamp
-	public Date createDate = new Date();
+	public Date createDate;
 
 	@Column(name = "isDelete")
-	public boolean isDelete = false;
+	public boolean isDelete;
 
 	@Transient
 	public List<String> messageError = new ArrayList<>();
 	// Relationship
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	public User user;
-
-	// @Column(name = "user_id")
-	// public long userId;
-	//
-	// @Transient
-	// public User user;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "post")
 	public List<Comment> comments;
@@ -80,7 +71,6 @@ public class Post extends Model {
 	public List<Category> categories;
 
 	public static Finder<Long, Post> find = new Finder<>(Post.class);
-	public static Finder<Long, User> findUser = new Finder<>(User.class);
 	// public static Finder<String, Post> finder = new Finder<>("kame", Post.class);
 	public static int pageSize = Constant.PAGINATION_PAGE_SIZE;
 
@@ -148,25 +138,6 @@ public class Post extends Model {
 		}
 		// return find.where().and(Expr.eq("categories", cat1), Expr.eq("categories", cat2))
 		// .findUnique();
-	}
-
-	public static void delete(long id) {
-		Post tem = findById(id);
-		tem.delete();
-	}
-
-	public void save() {
-		if (this.createDate == null) {
-			this.createDate = new Date();
-		}
-		super.save();
-	}
-
-	public void update() {
-		if (this.createDate == null) {
-			this.createDate = new Date();
-		}
-		super.update();
 	}
 
 	public void deletePost() {
@@ -270,28 +241,12 @@ public class Post extends Model {
 		this.categories = categories;
 	}
 
-	public static Finder<Long, Post> getFind() {
-		return find;
+	public String getKame() {
+		return kame;
 	}
 
-	public static void setFind(Finder<Long, Post> find) {
-		Post.find = find;
-	}
-
-	public static Finder<Long, User> getFindUser() {
-		return findUser;
-	}
-
-	public static void setFindUser(Finder<Long, User> findUser) {
-		Post.findUser = findUser;
-	}
-
-	public static int getPageSize() {
-		return pageSize;
-	}
-
-	public static void setPageSize(int pageSize) {
-		Post.pageSize = pageSize;
+	public void setKame(String kame) {
+		this.kame = kame;
 	}
 
 

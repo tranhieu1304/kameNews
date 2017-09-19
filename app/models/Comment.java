@@ -47,6 +47,8 @@ public class Comment extends Model {
 	@ManyToOne(cascade = CascadeType.ALL)
 	public Post post;
 
+	static Find<Long, Comment> find = new Find<Long, Comment>() {};
+
 	public void save() {
 		if (this.createDate == null) {
 			this.createDate = new Date();
@@ -59,6 +61,10 @@ public class Comment extends Model {
 			this.createDate = new Date();
 		}
 		super.update();
+	}
+
+	public static Comment findById(long id) {
+		return find.byId(id);
 	}
 
 	public void deletePost() {

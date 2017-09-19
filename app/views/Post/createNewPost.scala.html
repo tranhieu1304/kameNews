@@ -43,6 +43,12 @@
 					}
 
 	            </div>
+	             <form action="/form/demo" method="GET" enctype="multipart/form-data" name="form" id="form">
+	             	<input type="text" name="title"  />
+	             	<input type="text" name="kame"  />
+	             	<input type="text" name="name"  />
+	             	<input type="submit" value="FormDemoSumbit">
+	             </form>
 	        </div>
 	        @tablePost(posts, "createNewPost", currentPage, maxPage)
 

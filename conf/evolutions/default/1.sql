@@ -46,7 +46,7 @@ create table favorite (
   isdelete                      tinyint(1) default 0,
   user_id                       bigint,
   post_id                       bigint,
-  createdate                    datetime(6) not null,
+  createdate1                   datetime(6) not null,
   constraint pk_favorite primary key (id)
 );
 
@@ -72,12 +72,29 @@ create table user (
   sex                           integer,
   kame                          varchar(255),
   birthday                      datetime(6),
-  modifieddate                  datetime(6),
   isdelete                      tinyint(1) default 0,
   imagecontent                  longblob,
   createdate                    datetime(6) not null,
+  modifieddate                  datetime(6) not null,
   constraint uq_user_email unique (email),
   constraint pk_user primary key (id)
+);
+
+create table user2 (
+  id                            bigint auto_increment not null,
+  name                          varchar(255) not null,
+  password                      varchar(255) not null,
+  passwordconf                  varchar(255) not null,
+  email                         varchar(255) not null,
+  sex                           integer,
+  kame                          varchar(255),
+  birthday                      datetime(6),
+  isdelete                      tinyint(1) default 0,
+  imagecontent                  longblob,
+  createdate                    datetime(6) not null,
+  modifieddate                  datetime(6) not null,
+  constraint uq_user2_email unique (email),
+  constraint pk_user2 primary key (id)
 );
 
 alter table category_post add constraint fk_category_post_category foreign key (category_id) references category (id) on delete restrict on update restrict;
@@ -140,4 +157,6 @@ drop table if exists favorite;
 drop table if exists post;
 
 drop table if exists user;
+
+drop table if exists user2;
 
