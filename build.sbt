@@ -16,11 +16,14 @@ libraryDependencies ++= Seq(
 // bootstrap
 libraryDependencies ++= Seq(
   "com.adrianhurt" %% "play-bootstrap" % "1.1-P24-B3",
-   "org.jsoup" % "jsoup" % "1.7.2"
+   "org.jsoup" % "jsoup" % "1.7.2",
+    "org.elasticsearch" % "elasticsearch" % "2.1.1"
 )
+
+
 EclipseKeys.projectFlavor := EclipseProjectFlavor.Java           // Java project. Don't expect Scala IDE
-EclipseKeys.createSrc := EclipseCreateSrc.ValueSet(EclipseCreateSrc.ManagedClasses, EclipseCreateSrc.ManagedResources)  // Use .class files instead of generated .scala files for views and routes 
-EclipseKeys.preTasks := Seq(compile in Compile)                  // Compile the project before generating Eclipse files, so that .class files for views and routes are present                
+EclipseKeys.createSrc := EclipseCreateSrc.ValueSet(EclipseCreateSrc.ManagedClasses, EclipseCreateSrc.ManagedResources)  // Use .class files instead of generated .scala files for views and routes
+EclipseKeys.preTasks := Seq(compile in Compile)                  // Compile the project before generating Eclipse files, so that .class files for views and routes are present
 
 
 fork in run := false

@@ -41,5 +41,5 @@ public class Application extends Controller {
     	String path = request().getHeader("referer");
     	return redirect(path);
     }
-    
+
 }
